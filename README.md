@@ -6,7 +6,7 @@ Timetable are created for multiple classes
 No overlapping is done 
 
 # CONTENT IN time2.py
-we imported random for random allocation of teachers and subjects
+We imported random for random allocation of teachers and subjects
 we added days in this module
 time_slots are pre defined
 no overlapping is done
