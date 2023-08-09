@@ -1,8 +1,6 @@
 # CONTENT IN time.py
-we created a basic loop for timetable by taking inputs of time_Slots , teachers, subjects
-
+We created a basic loop for timetable by taking inputs of time_Slots , teachers, subjects
 Timetable are created for multiple classes
-
 No overlapping is done 
 
 # CONTENT IN time2.py
