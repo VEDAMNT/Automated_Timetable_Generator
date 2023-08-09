@@ -1,7 +1,9 @@
 # CONTENT IN time.py
 we created a basic loop for timetable by taking inputs of time_Slots , teachers, subjects
-timetable are created for multiple classes
-no overlapping is done 
+
+Timetable are created for multiple classes
+
+No overlapping is done 
 
 # CONTENT IN time2.py
 we imported random for random allocation of teachers and subjects
