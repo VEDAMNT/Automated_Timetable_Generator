@@ -15,3 +15,15 @@ Time_slots are pre defined.
 No overlapping is done.
 
 DRAWBACK : Timetable is created for one class only.
+
+# CONTENT IN time3.py
+Specific subjects are set to specific teachers by user.
+
+rather than using flag variable we have used simple pop and append method
+
+Days are pre-defined
+
+Time_slots are pre defined.
+
+No overlapping is done.
+
