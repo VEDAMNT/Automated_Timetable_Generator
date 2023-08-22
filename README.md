@@ -17,9 +17,11 @@ No overlapping is done.
 DRAWBACK : Timetable is created for one class only.
 
 # CONTENT IN time3.py
+We have unimported random module
+
 Specific subjects are set to specific teachers by user.
 
-rather than using flag variable we have used simple pop and append method
+Rather than using flag variable we have used simple pop and append method
 
 Days are pre-defined
 
