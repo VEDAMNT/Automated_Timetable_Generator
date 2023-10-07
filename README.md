@@ -52,3 +52,19 @@ Time_slots are pre defined.
 Specific subjects are set to specific teachers by user.
 
 Timetable is stored in tabular formatt for easier understanding.
+
+# CONTENT IN time6.py
+Timetable for mutiple classes is possible
+
+No overlapping
+
+Days are pre-defined.
+
+Time_slots are pre defined.
+
+Specific subjects are set to specific teachers by user.
+
+Timetable is stored in tabular formatt for easier understanding.
+
+We have imported random module
+Random free slots are assigned for each day
