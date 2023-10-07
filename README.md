@@ -39,3 +39,16 @@ Days are pre-defined
 Time_slots are pre defined.
 
 Specific subjects are set to specific teachers by user.
+
+# CONTENT IN time4.py
+Timetable for mutiple classes is possible
+
+No overlapping
+
+Days are pre-defined
+
+Time_slots are pre defined.
+
+Specific subjects are set to specific teachers by user.
+
+The timetable is stored in a tabular format making it easier to understand
