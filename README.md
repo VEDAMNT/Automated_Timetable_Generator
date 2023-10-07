@@ -34,7 +34,7 @@ Timetable for mutiple classes is possible
 
 No overlapping
 
-Days are pre-defined
+Days are pre-defined.
 
 Time_slots are pre defined.
 
