@@ -42,8 +42,6 @@ def GT(teachers, subjects):
             subjects.append(subject)
 
     free = ['1:45 - 2:45', '2:45 - 3:45', '3:45 - 4:45']
-
-   
         
     for time_slot in free:
         if timetable['Friday'][time_slot]['Teacher'] == '' and timetable['Friday'][time_slot]['Subject'] == '':
