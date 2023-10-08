@@ -43,42 +43,7 @@ def GT(teachers, subjects):
 
     free = ['1:45 - 2:45', '2:45 - 3:45', '3:45 - 4:45']
 
-    timetable['Monday']['11:00 - 11:15'] = {'Teacher': '| SHORT', 'Subject': 'BREAK |'}
-    timetable['Tuesday']['11:00 - 11:15'] = {'Teacher': '| SHORT', 'Subject': 'BREAK |'}
-    timetable['Wednesday']['11:00 - 11:15'] = {'Teacher': '| SHORT', 'Subject': 'BREAK |'}
-    timetable['Thursday']['11:00 - 11:15'] = {'Teacher': '| SHORT', 'Subject': 'BREAK |'}
-    timetable['Friday']['11:00 - 11:15'] = {'Teacher': '| SHORT', 'Subject': 'BREAK |'}
-    
-    timetable['Monday']['1:15 - 1:45'] = {'Teacher': '| LONG', 'Subject': 'BREAK |'}
-    timetable['Tuesday']['1:15 - 1:45'] = {'Teacher': '| LONG', 'Subject': 'BREAK |'}
-    timetable['Wednesday']['1:15 - 1:45'] = {'Teacher': '| LONG', 'Subject': 'BREAK |'}
-    timetable['Thursday']['1:15 - 1:45'] = {'Teacher': '| LONG', 'Subject': 'BREAK |'}
-    timetable['Friday']['1:15 - 1:45'] = {'Teacher': '| LONG', 'Subject': 'BREAK |'}
-    
-    A1 = teachers[0]
-    A2 = subjects[0]
-    timetable['Monday']['11:15 - 12:15 (LAB)'] = {'Teacher': A1, 'Subject': A2}
-    timetable['Monday']['12:15 - 1:15 (LAB)'] = {'Teacher': A1, 'Subject': A2}
-
-    B1 = teachers[1]
-    B2 = subjects[1]
-    timetable['Tuesday']['11:15 - 12:15 (LAB)'] = {'Teacher': B1, 'Subject': B2}
-    timetable['Tuesday']['12:15 - 1:15 (LAB)'] = {'Teacher': B1, 'Subject': B2}
-    
-    C1 = teachers[2]
-    C2 = subjects[2]
-    timetable['Wednesday']['11:15 - 12:15 (LAB)'] = {'Teacher': C1, 'Subject': C2}
-    timetable['Wednesday']['12:15 - 1:15 (LAB)'] = {'Teacher': C1, 'Subject': C2}
-    
-    D1 = teachers[3]
-    D2 = subjects[3]
-    timetable['Thursday']['11:15 - 12:15 (LAB)'] = {'Teacher': D1, 'Subject': D2}
-    timetable['Thursday']['12:15 - 1:15 (LAB)'] = {'Teacher': D1, 'Subject': D2}
-
-    E1 = teachers[4]
-    E2 = subjects[4]
-    timetable['Friday']['11:15 - 12:15 (LAB)'] = {'Teacher': E1, 'Subject': E2}
-    timetable['Friday']['12:15 - 1:15 (LAB)'] = {'Teacher': E1, 'Subject': E2}
+   
         
     for time_slot in free:
         if timetable['Friday'][time_slot]['Teacher'] == '' and timetable['Friday'][time_slot]['Subject'] == '':
