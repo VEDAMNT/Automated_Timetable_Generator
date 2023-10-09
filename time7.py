@@ -3,7 +3,7 @@ import random as r
 #------------------- List of days and time slots------------------------#
 
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-time_slots = ['09:00 - 10:00', '10:00 - 11:00','11:00 - 11:15', '11:15 - 12:15 (LAB)', '12:15 - 1:15 (LAB)','1:15 - 1:45','1:45 - 2:45', '2:45 - 3:45','3:45 - 4:45']
+time_slots = ['09:00 - 10:00', '10:00 - 11:00', '11:15 - 12:15 (LAB)', '12:15 - 1:15 (LAB)','1:15 - 1:45','1:45 - 2:45', '2:45 - 3:45','3:45 - 4:45']
 
 def A(prompt):
     try:
@@ -43,12 +43,6 @@ def GT(teachers, subjects):
 
     free = ['1:45 - 2:45', '2:45 - 3:45', '3:45 - 4:45']
 
-    timetable['Monday']['11:00 - 11:15'] = {'Teacher': '| SHORT', 'Subject': 'BREAK |'}
-    timetable['Tuesday']['11:00 - 11:15'] = {'Teacher': '| SHORT', 'Subject': 'BREAK |'}
-    timetable['Wednesday']['11:00 - 11:15'] = {'Teacher': '| SHORT', 'Subject': 'BREAK |'}
-    timetable['Thursday']['11:00 - 11:15'] = {'Teacher': '| SHORT', 'Subject': 'BREAK |'}
-    timetable['Friday']['11:00 - 11:15'] = {'Teacher': '| SHORT', 'Subject': 'BREAK |'}
-    
     timetable['Monday']['1:15 - 1:45'] = {'Teacher': '| LONG', 'Subject': 'BREAK |'}
     timetable['Tuesday']['1:15 - 1:45'] = {'Teacher': '| LONG', 'Subject': 'BREAK |'}
     timetable['Wednesday']['1:15 - 1:45'] = {'Teacher': '| LONG', 'Subject': 'BREAK |'}
