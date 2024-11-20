@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Function to dynamically create input fields based on the number of teachers/subjects
+        function updateInputFields() {
+            var numTeachers = parseInt(document.getElementById('num_teachers').value);
+            var numSubjects = parseInt(document.getElementById('num_subjects').value);
+
+            // Clear the existing input fields
+            document.getElementById('teacher-fields').innerHTML = '';
+            document.getElementById('subject-fields').innerHTML = '';
+
+            // Create teacher input fields
+            for (let i = 0; i < numTeachers; i++) {
+                $('#teacher-fields').append(`<input type="text" name="teachers" placeholder="Teacher Name ${i + 1}" required><br>`);
+            }
+
+            // Create subject input fields
+            for (let i = 0; i < numSubjects; i++) {
+                $('#subject-fields').append(`<input type="text" name="subjects" placeholder="Subject Name ${i + 1}" required><br>`);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Timetable Generator</h1>
+        <form action="/" method="POST">
+            <div>
+                <label for="class_name">Class Name:</label>
+                <input type="text" name="class_name" id="class_name" required>
+            </div>
+
+            <div>
+                <label for="num_teachers">Number of Teachers:</label>
+                <input type="number" name="num_teachers" id="num_teachers" min="1" required oninput="updateInputFields()">
+            </div>
+
+            <div>
+                <label for="num_subjects">Number of Subjects:</label>
+                <input type="number" name="num_subjects" id="num_subjects" min="1" required oninput="updateInputFields()">
+            </div>
+
+            <div id="teacher-fields">
+                <label>Teachers:</label>
+                <!-- Teacher input fields will be dynamically added here -->
+            </div>
+
+            <div id="subject-fields">
+                <label>Subjects:</label>
+                <!-- Subject input fields will be dynamically added here -->
+            </div>
+
+            <button type="submit">Generate Timetable</button>
+        </form>
+
+        {% if tables %}
+        <h2>Generated Timetable</h2>
+        <div>
+            {% for class_name, table in tables.items() %}
+                <h3>Timetable for {{ class_name }}</h3>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Day / Time</th>
+                            {% for time in table[0][1:] %}
+                                <th>{{ time }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in table[1:] %}
+                            <tr>
+                                <td>{{ row[0] }}</td>
+                                {% for cell in row[1:] %}
+                                    <td>{{ cell }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
