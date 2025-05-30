@@ -212,10 +212,6 @@ class TestTimetableGenerator(unittest.TestCase):
 * **Conflicts Not Detected:** Verify teacher names are identical across classes (case-sensitive).
 * **Slow Generation:** For large datasets, consider using a constraint solver like `python-constraint`.
 
-## License
-
-MIT License. See LICENSE for details.
-
 ## Contact
 
-For issues or contributions, open a GitHub issue or pull request at <repository-url>.
+For issues or contributions, open a GitHub issue or pull request.
