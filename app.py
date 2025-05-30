@@ -7,7 +7,6 @@ import io
 
 app = Flask(__name__)
 
-# ------------------- Configuration ------------------------#
 DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 TIME_SLOTS = [
     '09:00 - 10:00', '10:00 - 11:00', '11:00 - 11:15', 
