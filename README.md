@@ -26,7 +26,7 @@ A Flask-based web application for generating academic timetables with constraint
 ### Clone the Repository:
 
 ```bash
-git clone <repository-url>
+git clone <https://github.com/VEDAMNT/Automated_Timetable_Generator>
 cd academic-timetable-generator
 ```
 
