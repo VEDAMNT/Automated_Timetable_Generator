@@ -141,7 +141,7 @@ TIME_SLOTS = [
 * **Security:** Lacks input sanitization and CSRF protection.
 
 ## Improvements
-
+I do not required it yet, you can use this as a future scope too.
 ### Server-Side PDF Generation:
 
 Install WeasyPrint and modify `export_pdf` route:
