@@ -3,91 +3,814 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timetable Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        // Function to dynamically create input fields based on the number of teachers/subjects
-        function updateInputFields() {
-            var numTeachers = parseInt(document.getElementById('num_teachers').value);
-            var numSubjects = parseInt(document.getElementById('num_subjects').value);
+    <title>Academic Timetable Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-            // Clear the existing input fields
-            document.getElementById('teacher-fields').innerHTML = '';
-            document.getElementById('subject-fields').innerHTML = '';
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
 
-            // Create teacher input fields
-            for (let i = 0; i < numTeachers; i++) {
-                $('#teacher-fields').append(`<input type="text" name="teachers" placeholder="Teacher Name ${i + 1}" required><br>`);
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-section {
+            margin-bottom: 40px;
+        }
+
+        .class-form {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .class-form:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .teacher-subject-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        .teacher-subject-group input {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .timetable-display {
+            margin-top: 40px;
+        }
+
+        .class-timetable {
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .class-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+
+        .timetable-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .timetable-table th,
+        .timetable-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            font-size: 12px;
+            vertical-align: middle;
+        }
+
+        .timetable-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .timetable-table td {
+            height: 60px;
+            position: relative;
+        }
+
+        .time-column {
+            background: #e9ecef !important;
+            font-weight: 600;
+            width: 150px;
+        }
+
+        .break-cell {
+            background: #fff3cd !important;
+            color: #856404;
+            font-weight: 600;
+        }
+
+        .lab-cell {
+            background: #d1ecf1 !important;
+            color: #0c5460;
+        }
+
+        .free-cell {
+            background: #f8d7da !important;
+            color: #721c24;
+        }
+
+        .regular-cell {
+            background: #d4edda !important;
+            color: #155724;
+        }
+
+        .teacher-name {
+            font-weight: 600;
+            display: block;
+        }
+
+        .subject-name {
+            font-size: 11px;
+            opacity: 0.8;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .conflicts-section {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .conflict-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .teacher-subject-group {
+                flex-direction: column;
             }
-
-            // Create subject input fields
-            for (let i = 0; i < numSubjects; i++) {
-                $('#subject-fields').append(`<input type="text" name="subjects" placeholder="Subject Name ${i + 1}" required><br>`);
+            
+            .actions-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .export-buttons {
+                justify-content: center;
+            }
+            
+            .timetable-table {
+                font-size: 10px;
+            }
+            
+            .timetable-table th,
+            .timetable-table td {
+                padding: 8px 4px;
             }
         }
-    </script>
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Timetable Generator</h1>
-        <form action="/" method="POST">
-            <div>
-                <label for="class_name">Class Name:</label>
-                <input type="text" name="class_name" id="class_name" required>
-            </div>
-
-            <div>
-                <label for="num_teachers">Number of Teachers:</label>
-                <input type="number" name="num_teachers" id="num_teachers" min="1" required oninput="updateInputFields()">
-            </div>
-
-            <div>
-                <label for="num_subjects">Number of Subjects:</label>
-                <input type="number" name="num_subjects" id="num_subjects" min="1" required oninput="updateInputFields()">
-            </div>
-
-            <div id="teacher-fields">
-                <label>Teachers:</label>
-                <!-- Teacher input fields will be dynamically added here -->
-            </div>
-
-            <div id="subject-fields">
-                <label>Subjects:</label>
-                <!-- Subject input fields will be dynamically added here -->
-            </div>
-
-            <button type="submit">Generate Timetable</button>
-        </form>
-
-        {% if tables %}
-        <h2>Generated Timetable</h2>
-        <div>
-            {% for class_name, table in tables.items() %}
-                <h3>Timetable for {{ class_name }}</h3>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Day / Time</th>
-                            {% for time in table[0][1:] %}
-                                <th>{{ time }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for row in table[1:] %}
-                            <tr>
-                                <td>{{ row[0] }}</td>
-                                {% for cell in row[1:] %}
-                                    <td>{{ cell }}</td>
-                                {% endfor %}
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% endfor %}
+        <div class="header">
+            <h1><i class="fas fa-calendar-alt"></i> Academic Timetable Generator</h1>
+            <p>Advanced constraint satisfaction scheduling system for multiple classes</p>
         </div>
-        {% endif %}
+
+        <div class="main-card">
+            <div class="section-title">
+                <i class="fas fa-plus-circle"></i>
+                Class Configuration
+            </div>
+
+            <div class="input-section">
+                <div id="classes-container">
+                    <!-- Classes will be added here dynamically -->
+                </div>
+                
+                <button type="button" class="btn btn-secondary btn-small" onclick="addClass()">
+                    <i class="fas fa-plus"></i> Add New Class
+                </button>
+            </div>
+
+            <div class="actions-bar">
+                <button type="button" class="btn btn-primary" onclick="generateTimetables()">
+                    <i class="fas fa-magic"></i> Generate Timetables
+                </button>
+                
+                <div class="export-buttons" id="exportButtons" style="display: none;">
+                    <button type="button" class="btn btn-success btn-small" onclick="exportCSV()">
+                        <i class="fas fa-file-csv"></i> Export CSV
+                    </button>
+                    <button type="button" class="btn btn-success btn-small" onclick="exportPDF()">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Generating optimized timetables...</p>
+            </div>
+
+            <div id="results" style="display: none;">
+                <div class="stats-bar" id="statsBar">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalClasses">0</div>
+                        <div class="stat-label">Classes</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalTeachers">0</div>
+                        <div class="stat-label">Teachers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="conflictCount">0</div>
+                        <div class="stat-label">Conflicts</div>
+                    </div>
+                </div>
+
+                <div id="conflicts"></div>
+                
+                <div class="timetable-display" id="timetables">
+                    <!-- Generated timetables will appear here -->
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        let classCount = 0;
+        let generatedTimetables = null;
+
+        // Add initial class
+        addClass();
+
+        function addClass() {
+            classCount++;
+            const container = document.getElementById('classes-container');
+            
+            const classDiv = document.createElement('div');
+            classDiv.className = 'class-form';
+            classDiv.id = `class-${classCount}`;
+            
+            classDiv.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="color: #2c3e50; margin: 0;">Class ${classCount}</h3>
+                    <button type="button" class="btn btn-danger btn-small" onclick="removeClass(${classCount})">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Class Name</label>
+                    <input type="text" class="form-input" name="class_name" placeholder="e.g., Computer Science A" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Teachers & Subjects</label>
+                    <div id="teachers-${classCount}">
+                        <div class="teacher-subject-group">
+                            <input type="text" class="form-input" placeholder="Teacher Name" name="teacher" required>
+                            <input type="text" class="form-input" placeholder="Subject" name="subject" required>
+                            <button type="button" class="btn btn-danger btn-small" onclick="removeTeacherSubject(this)">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary btn-small" onclick="addTeacherSubject(${classCount})">
+                        <i class="fas fa-plus"></i> Add Teacher & Subject
+                    </button>
+                </div>
+            `;
+            
+            container.appendChild(classDiv);
+        }
+
+        function removeClass(classId) {
+            const classElement = document.getElementById(`class-${classId}`);
+            if (classElement) {
+                classElement.remove();
+            }
+        }
+
+        function addTeacherSubject(classId) {
+            const container = document.getElementById(`teachers-${classId}`);
+            const newGroup = document.createElement('div');
+            newGroup.className = 'teacher-subject-group';
+            newGroup.innerHTML = `
+                <input type="text" class="form-input" placeholder="Teacher Name" name="teacher" required>
+                <input type="text" class="form-input" placeholder="Subject" name="subject" required>
+                <button type="button" class="btn btn-danger btn-small" onclick="removeTeacherSubject(this)">
+                    <i class="fas fa-minus"></i>
+                </button>
+            `;
+            container.appendChild(newGroup);
+        }
+
+        function removeTeacherSubject(button) {
+            const group = button.closest('.teacher-subject-group');
+            const container = group.parentElement;
+            
+            // Don't remove if it's the last one
+            if (container.children.length > 1) {
+                group.remove();
+            } else {
+                alert('Each class must have at least one teacher and subject.');
+            }
+        }
+
+        function collectClassesData() {
+            const classElements = document.querySelectorAll('.class-form');
+            const classesData = [];
+
+            classElements.forEach(classElement => {
+                const className = classElement.querySelector('input[name="class_name"]').value.trim();
+                if (!className) return;
+
+                const teacherInputs = classElement.querySelectorAll('input[name="teacher"]');
+                const subjectInputs = classElement.querySelectorAll('input[name="subject"]');
+                
+                const teachers = [];
+                const subjects = [];
+
+                teacherInputs.forEach((input, index) => {
+                    const teacher = input.value.trim();
+                    const subject = subjectInputs[index].value.trim();
+                    
+                    if (teacher && subject) {
+                        teachers.push(teacher);
+                        subjects.push(subject);
+                    }
+                });
+
+                if (teachers.length > 0 && subjects.length > 0) {
+                    classesData.push({
+                        class_name: className,
+                        teachers: teachers,
+                        subjects: subjects
+                    });
+                }
+            });
+
+            return classesData;
+        }
+
+        async function generateTimetables() {
+            const classesData = collectClassesData();
+            
+            if (classesData.length === 0) {
+                alert('Please add at least one class with teachers and subjects.');
+                return;
+            }
+
+            // Validation
+            for (let classData of classesData) {
+                if (classData.teachers.length !== classData.subjects.length) {
+                    alert(`Class "${classData.class_name}" has mismatched teachers and subjects.`);
+                    return;
+                }
+            }
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+
+            try {
+                const response = await fetch('/generate_timetables', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ classes: classesData })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    generatedTimetables = data.tables;
+                    displayResults(data);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error generating timetables: ' + error.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function displayResults(data) {
+            const { tables, conflicts, teacher_subjects } = data;
+            
+            // Update stats
+            const totalClasses = Object.keys(tables).length;
+            const totalTeachers = Object.keys(teacher_subjects).length;
+            const conflictCount = conflicts.length;
+
+            document.getElementById('totalClasses').textContent = totalClasses;
+            document.getElementById('totalTeachers').textContent = totalTeachers;
+            document.getElementById('conflictCount').textContent = conflictCount;
+
+            // Display conflicts if any
+            const conflictsDiv = document.getElementById('conflicts');
+            if (conflicts.length > 0) {
+                conflictsDiv.innerHTML = `
+                    <div class="conflicts-section">
+                        <h3 style="color: #721c24; margin-bottom: 15px;">
+                            <i class="fas fa-exclamation-triangle"></i> 
+                            Scheduling Conflicts Detected (${conflicts.length})
+                        </h3>
+                        ${conflicts.map(conflict => `
+                            <div class="conflict-item">
+                                <strong>${conflict.day} at ${conflict.time_slot}</strong><br>
+                                Conflicting assignments: ${conflict.conflicting_assignments.map(ca => 
+                                    `${ca[0]} (${ca[1]})`
+                                ).join(', ')}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                conflictsDiv.innerHTML = `
+                    <div style="background: #d4edda; border: 1px solid #c3e6cb; border-radius: 10px; padding: 20px; margin-bottom: 20px; color: #155724;">
+                        <h3><i class="fas fa-check-circle"></i> No Conflicts Detected!</h3>
+                        <p>All timetables have been generated successfully without teacher conflicts.</p>
+                    </div>
+                `;
+            }
+
+            // Display timetables
+            const timetablesDiv = document.getElementById('timetables');
+            timetablesDiv.innerHTML = '';
+
+            for (const [className, table] of Object.entries(tables)) {
+                const classDiv = document.createElement('div');
+                classDiv.className = 'class-timetable';
+                
+                classDiv.innerHTML = `
+                    <div class="class-header">
+                        <i class="fas fa-graduation-cap"></i> ${className}
+                    </div>
+                    ${generateTableHTML(table)}
+                `;
+                
+                timetablesDiv.appendChild(classDiv);
+            }
+
+            // Show results and export buttons
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('exportButtons').style.display = 'flex';
+        }
+
+        function generateTableHTML(table) {
+            let html = '<table class="timetable-table">';
+            
+            table.forEach((row, rowIndex) => {
+                html += '<tr>';
+                row.forEach((cell, colIndex) => {
+                    const isHeader = rowIndex === 0 || colIndex === 0;
+                    const tag = isHeader ? 'th' : 'td';
+                    
+                    let cellClass = '';
+                    let cellContent = cell;
+                    
+                    if (!isHeader) {
+                        if (colIndex === 0) {
+                            cellClass = 'time-column';
+                        } else if (cell.includes('BREAK')) {
+                            cellClass = 'break-cell';
+                        } else if (cell.includes('FREE PERIOD')) {
+                            cellClass = 'free-cell';
+                        } else if (cell.includes('(LAB)')) {
+                            cellClass = 'lab-cell';
+                        } else if (cell.includes('\n') && !cell.includes('BREAK')) {
+                            cellClass = 'regular-cell';
+                            const parts = cell.split('\n');
+                            cellContent = `<span class="teacher-name">${parts[0]}</span><span class="subject-name">${parts[1]}</span>`;
+                        }
+                    }
+                    
+                    html += `<${tag} class="${cellClass}">${cellContent}</${tag}>`;
+                });
+                html += '</tr>';
+            });
+            
+            html += '</table>';
+            return html;
+        }
+
+        function exportCSV() {
+            if (!generatedTimetables) {
+                alert('Please generate timetables first.');
+                return;
+            }
+
+            const dataParam = encodeURIComponent(JSON.stringify(convertTablesForExport()));
+            window.open(`/export_csv?data=${dataParam}`, '_blank');
+        }
+
+        function exportPDF() {
+            if (!generatedTimetables) {
+                alert('Please generate timetables first.');
+                return;
+            }
+
+            const dataParam = encodeURIComponent(JSON.stringify(convertTablesForExport()));
+            window.open(`/export_pdf?data=${dataParam}`, '_blank');
+        }
+
+        function convertTablesForExport() {
+            const exportData = {};
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+            const timeSlots = [
+                '09:00 - 10:00', '10:00 - 11:00', '11:00 - 11:15', 
+                '11:15 - 12:15', '12:15 - 1:15', '1:15 - 1:45', 
+                '1:45 - 2:45', '2:45 - 3:45', '3:45 - 4:45'
+            ];
+
+            for (const [className, table] of Object.entries(generatedTimetables)) {
+                exportData[className] = {};
+                
+                days.forEach(day => {
+                    exportData[className][day] = {};
+                });
+
+                // Skip header row and process data
+                for (let i = 1; i < table.length; i++) {
+                    const timeSlot = table[i][0];
+                    
+                    for (let j = 1; j < table[i].length; j++) {
+                        const day = days[j - 1];
+                        const cellValue = table[i][j];
+                        
+                        let teacher = '';
+                        let subject = '';
+                        let type = 'REGULAR';
+
+                        if (cellValue.includes('BREAK')) {
+                            if (cellValue.includes('SHORT')) {
+                                teacher = '| SHORT';
+                                subject = 'BREAK |';
+                            } else {
+                                teacher = '| LONG';
+                                subject = 'BREAK |';
+                            }
+                            type = 'BREAK';
+                        } else if (cellValue === 'FREE PERIOD') {
+                            teacher = 'FREE';
+                            subject = 'PERIOD';
+                            type = 'FREE';
+                        } else if (cellValue.includes('\n')) {
+                            const parts = cellValue.split('\n');
+                            teacher = parts[0];
+                            subject = parts[1];
+                            if (subject.includes('(LAB)')) {
+                                type = 'LAB';
+                            }
+                        }
+
+                        exportData[className][day][timeSlot] = {
+                            Teacher: teacher,
+                            Subject: subject,
+                            Type: type
+                        };
+                    }
+                }
+            }
+
+            return exportData;
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        generateTimetables();
+                        break;
+                    case 'n':
+                        e.preventDefault();
+                        addClass();
+                        break;
+                }
+            }
+        });
+
+        // Auto-save form data to prevent loss
+        function saveFormData() {
+            const classesData = collectClassesData();
+            localStorage.setItem('timetableFormData', JSON.stringify(classesData));
+        }
+
+        function loadFormData() {
+            const savedData = localStorage.getItem('timetableFormData');
+            if (savedData) {
+                try {
+                    const classesData = JSON.parse(savedData);
+                    // Implementation for restoring form data would go here
+                } catch (e) {
+                    console.log('Could not load saved form data');
+                }
+            }
+        }
+
+        // Save form data periodically
+        setInterval(saveFormData, 30000); // Save every 30 seconds
+
+        // Add some helpful tooltips and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth animations for form interactions
+            const inputs = document.querySelectorAll('.form-input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.transform = 'scale(1.02)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
 </body>
 </html>
